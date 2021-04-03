@@ -1,0 +1,82 @@
+version: '3'
+
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: zookeeper:3.4.9
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_PORT: 2181
+      ZOO_SERVERS: server.1=zookeeper:2888:3888
+    volumes:
+      - ./data/zookeeper/data:/data
+      - ./data/zookeeper/datalog:/datalog
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:5.5.1
+    hostname: kafka
+    ports:
+      - "9092:9092"
+    links: 
+      - zookeeper
+    environment:
+     
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-kafka}:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_CREATE_TOPICS: "kartaca"
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./data/kafka/data:/var/lib/kafka/data
+    depends_on:
+      - zookeeper
+  influxdb:
+    image: influxdb:1.8.3  
+    container_name: influxdb
+    restart: always
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=logsdata
+    env_file:
+      - 'env.influxdb'
+    volumes:
+      - ./data_influxdb:/var/lib/influxdb
+  grafana:
+    image: grafana/grafana:7.3.7     
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    user: "0"
+    links:
+      - influxdb
+    volumes:
+      - ./data_grafana:/var/lib/grafana
+  producer:
+    build: ./producer-api
+    container_name: producer
+    ports:
+      - 4000:4000
+  consumer:
+    build: ./consumer-api
+    container_name: consumer
+    ports:
+      - 4001:4001
+  faker:
+    container_name: faker
+    image: dotronglong/faker:stable
+    volumes:
+      - ./mocks:/app/mocks
+    ports:
+      - "3030:3030"
+volumes:
+  data_influxdb:
+  data_grafana:
+  telegraf.conf:
+
+  

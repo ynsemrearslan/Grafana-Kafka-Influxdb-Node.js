@@ -1,3 +1,5 @@
+![Grafana Ekran Görüntüsü](https://github.com/ynsemrearslan/Grafana-Kafka-Influxdb-Node.js/blob/main/grafana.jpg?raw=true)
+
 #  Apache Kafka Grafana Node.js Ifluxdb
 
 Kartaca Çekirdekten Yetişenler Programı Uygulama ve Servis Geliştirme Bölümü uygulama görevi.

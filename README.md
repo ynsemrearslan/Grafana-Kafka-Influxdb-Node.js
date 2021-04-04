@@ -17,6 +17,9 @@ docker-compose up --build
 ### Grafana
 
  Grafana en popüler Dashboard oluşturma uygulamalarından biri. Data Source olarak birçok farklı Database türünü destekliyor. Kafka ile ve InfluxDB üzerine aktardığımız verilerimizi Grafana ile oluşturduğumuz Dashboard lar üzerinde görüntüleyeceğiz.
+ 
+ Email or username: admin
+ Password         : admin
 
 ### Node.js
 
@@ -29,6 +32,10 @@ Node.js ile [kafka.js](https://github.com/tulios/kafkajs) bağımlılığı kull
 ### Influxdb
 
  InfluxData firması tarafından yine GO programlama dili yazılmış ve genellikle IOT cihazlar tarafından toplanan veriler, performans ve analiz verilerini saklamak için kullanılan bir Database. Apache consumer ile okunan veriler InfluxDB üzerine yazacağız.
+ 
+ database :logsdata
+ username :root
+ password :
 
 ### [dotronglong/faker:stable](https://hub.docker.com/r/dotronglong/faker)
 
